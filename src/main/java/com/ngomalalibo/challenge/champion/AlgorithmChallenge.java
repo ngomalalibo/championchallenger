@@ -45,6 +45,9 @@ public class AlgorithmChallenge
         target = client.target(PAGE_URL);
     }
     
+    /**
+     * Answer: Function One
+     */
     // get username of most active users with most approved articles
     public static List<String> getUsernames(int threshold)
     {
@@ -56,72 +59,9 @@ public class AlgorithmChallenge
         
     }
     
-    // Run class to execute three challenges. Provide the threshold when prompted
-    public static void main(String[] args)
-    {
-        //Question 1
-        Scanner scanner = new Scanner(System.in);
-        log.info("Enter threshold to get active users: ");
-        try
-        {
-            String entry = scanner.next();
-            while (!isInteger(entry))
-            {
-                System.out.println("Re-enter an integer threshold to get most active users (or q to quit): ");
-                entry = scanner.next();
-                
-                
-                if (entry.equalsIgnoreCase("q"))
-                {
-                    System.exit(0);
-                }
-            }
-            threshold = Integer.parseInt(entry);
-            List<String> usernames = getUsernames(threshold);
-            if (usernames != null)
-            {
-                usernames.forEach(System.out::println);
-            }
-            
-            
-            //Question 2
-            String username = getUsernameWithHighestCommentCount();
-            log.info("username with most comments -> " + username);
-            
-            
-            //Question 3
-            System.out.print("\n\n\n\nEnter threshold to get users sorted by record creation: ");
-            try
-            {
-                entry = scanner.next();
-                while (!isInteger(entry))
-                {
-                    System.out.println("Re-enter an integer threshold to get users sorted by timestamp of record creation (or q to quit): ");
-                    entry = scanner.next();
-                    
-                    if (entry.equalsIgnoreCase("q"))
-                    {
-                        System.exit(0);
-                    }
-                }
-                threshold = Integer.parseInt(entry);
-                usernames = getUsernamesSortedByRecordDate(threshold);
-                if (usernames != null)
-                {
-                    usernames.forEach(System.out::println);
-                }
-            }
-            catch (NumberFormatException e)
-            {
-                e.getMessage();
-            }
-        }
-        catch (NumberFormatException e)
-        {
-            e.getMessage();
-        }
-    }
-    
+    /**
+     * Answer: Function Two
+     */
     public static String getUsernameWithHighestCommentCount()
     {
         System.out.println("\n\n\n\nUser with most comments");
@@ -129,6 +69,21 @@ public class AlgorithmChallenge
         
         return completeListOfUsers.stream().max(Comparator.comparingInt(User::getTotalNoOfComments)).map(user -> user.getUsername() + " (" + user.getTotalNoOfComments() + ") ").orElseGet(null);
     }
+    
+    /**
+     * Answer: Function Three
+     */
+    public static List<String> getUsernamesSortedByRecordDate(int threshold)
+    {
+        log.info(threshold + " most recently created records are: ");
+        log.info("Loading...");
+        
+        List<User> completeListOfUsers = (List<User>) getPageResults().get("completeListOfUsers"); // get list of users from map
+        
+        // stream users, reverse sort on created date, get pretty printed username and created date
+        return completeListOfUsers.stream().sorted(Comparator.comparing(User::getCreatedDate)).map(user -> user.getUsername() + " (" + user.getCreatedDate() + ") ").limit(threshold).collect(Collectors.toList());
+    }
+    
     
     // get result of all pages
     public static Map<String, List<?>> getPageResults()
@@ -177,17 +132,6 @@ public class AlgorithmChallenge
         usersAndPageResults.put("completeListOfUsers", completeListOfUsers); // map stores all user details
         
         return usersAndPageResults;
-    }
-    
-    public static List<String> getUsernamesSortedByRecordDate(int threshold)
-    {
-        log.info(threshold + " most recently created records are: ");
-        log.info("Loading...");
-        
-        List<User> completeListOfUsers = (List<User>) getPageResults().get("completeListOfUsers"); // get list of users from map
-        
-        // stream users, reverse sort on created date, get pretty printed username and created date
-        return completeListOfUsers.stream().sorted(Comparator.comparing(User::getCreatedDate).reversed()).map(user -> user.getUsername() + " (" + user.getCreatedDate() + ") ").limit(threshold).collect(Collectors.toList());
     }
     
     
@@ -299,6 +243,74 @@ public class AlgorithmChallenge
         
         return null;
     }
+    
+    
+    // Run class to execute three challenges. Provide the threshold when prompted
+    public static void main(String[] args)
+    {
+        //Question 1
+        Scanner scanner = new Scanner(System.in);
+        log.info("Enter threshold to get active users: ");
+        try
+        {
+            String entry = scanner.next();
+            while (!isInteger(entry))
+            {
+                System.out.println("Re-enter an integer threshold to get most active users (or q to quit): ");
+                entry = scanner.next();
+                
+                
+                if (entry.equalsIgnoreCase("q"))
+                {
+                    System.exit(0);
+                }
+            }
+            threshold = Integer.parseInt(entry);
+            List<String> usernames = getUsernames(threshold);
+            if (usernames != null)
+            {
+                usernames.forEach(System.out::println);
+            }
+            
+            
+            //Question 2
+            String username = getUsernameWithHighestCommentCount();
+            log.info("User with most comments -> " + username);
+            
+            
+            //Question 3
+            System.out.print("\n\n\n\nEnter threshold to get users sorted by record creation: ");
+            try
+            {
+                entry = scanner.next();
+                while (!isInteger(entry))
+                {
+                    System.out.println("Re-enter an integer threshold to get users sorted by timestamp of record creation (or q to quit): ");
+                    entry = scanner.next();
+                    
+                    if (entry.equalsIgnoreCase("q"))
+                    {
+                        System.exit(0);
+                    }
+                }
+                threshold = Integer.parseInt(entry);
+                usernames = getUsernamesSortedByRecordDate(threshold);
+                if (usernames != null)
+                {
+                    usernames.forEach(System.out::println);
+                }
+            }
+            catch (NumberFormatException e)
+            {
+                e.getMessage();
+            }
+        }
+        catch (NumberFormatException e)
+        {
+            e.getMessage();
+        }
+    }
+    
     
     // utility method to check is string is a number
     private static boolean isInteger(String s)
