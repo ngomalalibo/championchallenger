@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode
-public class DUser
+public class User
 {
     /**
      * id: unique ID of the user

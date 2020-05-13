@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode
-public class DPageResult
+public class PageResult
 {//*page, per_page, total, total_pages, data
     
     /**
@@ -26,6 +26,6 @@ public class DPageResult
     private int usersPerPage;
     private int totalNoOfUsers;
     private int totalNoOfPages;
-    private List<DUser> listOfUsersOnPage = new ArrayList<>();
+    private List<User> listOfUsersOnPage = new ArrayList<>();
     
 }

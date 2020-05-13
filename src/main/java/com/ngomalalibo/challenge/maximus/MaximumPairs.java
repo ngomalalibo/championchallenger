@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 
 @Slf4j
-public class DMaximumPairs
+public class MaximumPairs
 {
     private static Scanner scanner = new Scanner(System.in);
     

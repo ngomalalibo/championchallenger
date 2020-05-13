@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.ngomalalibo.challenge.models.DPageResult;
-import com.ngomalalibo.challenge.models.DUser;
+import com.ngomalalibo.challenge.models.PageResult;
+import com.ngomalalibo.challenge.models.User;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class DChallenge
+public class AlgorithmChallenge
 {
     private static Client client;
     private static WebTarget target;
@@ -50,9 +50,9 @@ public class DChallenge
     {
         log.info(threshold + " most active users based on number of submitted and approved articles are: ");
         log.info("Loading...");
-        List<DUser> completeListOfUsers = (List<DUser>) getPageResults().get("completeListOfUsers");
+        List<User> completeListOfUsers = (List<User>) getPageResults().get("completeListOfUsers");
         
-        return completeListOfUsers.stream().sorted(Comparator.comparingInt(DUser::getNoOfApprovedArticles).reversed()).limit(threshold).map(d -> d.getUsername() + " (" + d.getNoOfApprovedArticles() + ") ").collect(Collectors.toList());
+        return completeListOfUsers.stream().sorted(Comparator.comparingInt(User::getNoOfApprovedArticles).reversed()).limit(threshold).map(d -> d.getUsername() + " (" + d.getNoOfApprovedArticles() + ") ").collect(Collectors.toList());
         
     }
     
@@ -125,9 +125,9 @@ public class DChallenge
     public static String getUsernameWithHighestCommentCount()
     {
         System.out.println("\n\n\n\nUser with most comments");
-        List<DUser> completeListOfUsers = (List<DUser>) getPageResults().get("completeListOfUsers");
+        List<User> completeListOfUsers = (List<User>) getPageResults().get("completeListOfUsers");
         
-        return completeListOfUsers.stream().max(Comparator.comparingInt(DUser::getTotalNoOfComments)).map(user -> user.getUsername() + " (" + user.getTotalNoOfComments() + ") ").orElseGet(null);
+        return completeListOfUsers.stream().max(Comparator.comparingInt(User::getTotalNoOfComments)).map(user -> user.getUsername() + " (" + user.getTotalNoOfComments() + ") ").orElseGet(null);
     }
     
     // get result of all pages
@@ -135,13 +135,13 @@ public class DChallenge
     {
         Map<String, List<?>> usersAndPageResults = new HashMap<>(); // map to hold data for pages and for all users
         
-        List<DPageResult> pageResults = new ArrayList<>();
-        List<DUser> completeListOfUsers = new ArrayList<>();
+        List<PageResult> pageResults = new ArrayList<>();
+        List<User> completeListOfUsers = new ArrayList<>();
         
         int totalNoOfPages;
         
         int page = 1; // page counting starts from one
-        DPageResult pageResult = getPageResult(page); // get result for first page
+        PageResult pageResult = getPageResult(page); // get result for first page
         totalNoOfPages = getPageResult(page).getTotalNoOfPages(); // get total no of pages from page result
         
         //do..while loop used to get users on all pages starting page page one. Not zero as indicated
@@ -184,14 +184,14 @@ public class DChallenge
         log.info(threshold + " most recently created records are: ");
         log.info("Loading...");
         
-        List<DUser> completeListOfUsers = (List<DUser>) getPageResults().get("completeListOfUsers"); // get list of users from map
+        List<User> completeListOfUsers = (List<User>) getPageResults().get("completeListOfUsers"); // get list of users from map
         
         // stream users, reverse sort on created date, get pretty printed username and created date
-        return completeListOfUsers.stream().sorted(Comparator.comparing(DUser::getCreatedDate).reversed()).map(user -> user.getUsername() + " (" + user.getCreatedDate() + ") ").limit(threshold).collect(Collectors.toList());
+        return completeListOfUsers.stream().sorted(Comparator.comparing(User::getCreatedDate).reversed()).map(user -> user.getUsername() + " (" + user.getCreatedDate() + ") ").limit(threshold).collect(Collectors.toList());
     }
     
     
-    public static DPageResult getPageResult(int pageNumber)
+    public static PageResult getPageResult(int pageNumber)
     {
         // provide page number to url
         setPageUrl(pageNumber);
@@ -199,9 +199,9 @@ public class DChallenge
         URL url = null;
         
         //get page result with list of users
-        DPageResult pageResult;
-        DUser user;
-        List<DUser> users = new ArrayList<>();
+        PageResult pageResult;
+        User user;
+        List<User> users = new ArrayList<>();
         
         //date formatter to retrieve updatedDate
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -250,7 +250,7 @@ public class DChallenge
                         while (count < userArray.length())
                         {
                             // traverse array and store user info in user object and array
-                            user = new DUser();
+                            user = new User();
                             JSONObject jsonEmbed = userArray.getJSONObject(count);
                             
                             user.setId(jsonEmbed.getInt("id"));
@@ -276,7 +276,7 @@ public class DChallenge
                         }
                     }
                     
-                    pageResult = new DPageResult();
+                    pageResult = new PageResult();
                     pageResult.setPageIndex(pageIndex);
                     pageResult.setUsersPerPage(usersPerPage);
                     pageResult.setTotalNoOfPages(totalNoOfPages);
