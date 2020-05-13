@@ -60,13 +60,9 @@ public class MaximumPairs
         cleanPile.addAll(Arrays.asList(1, 2, 1, 1));
         dirtyPile.addAll(Arrays.asList(1, 4, 3, 2, 4));
         
-        
+        //get all colors of socks
         allSocks.addAll(cleanPile);
         allSocks.addAll(dirtyPile);
-        System.out.println(allSocks.toString());
-        
-        /*allSocks.addAll(cleanPile);
-        allSocks.addAll(dirtyPile);*/
         
         log.info("Enter threshold to get active users: ");
         
