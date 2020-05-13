@@ -85,6 +85,9 @@ public class AlgorithmChallenge
     }
     
     
+    /**
+     * Utility Method
+     */
     // get result of all pages
     public static Map<String, List<?>> getPageResults()
     {
@@ -134,7 +137,10 @@ public class AlgorithmChallenge
         return usersAndPageResults;
     }
     
-    
+    /**
+     * Utility method
+     */
+    // get page result
     public static PageResult getPageResult(int pageNumber)
     {
         // provide page number to url
@@ -244,7 +250,9 @@ public class AlgorithmChallenge
         return null;
     }
     
-    
+    /**
+     * Start program and run all three functions.
+     */
     // Run class to execute three challenges. Provide the threshold when prompted
     public static void main(String[] args)
     {
@@ -254,12 +262,14 @@ public class AlgorithmChallenge
         try
         {
             String entry = scanner.next();
+            // ensure user enters a numeric threshold
             while (!isInteger(entry))
             {
+                
                 System.out.println("Re-enter an integer threshold to get most active users (or q to quit): ");
                 entry = scanner.next();
                 
-                
+                // exit application when q is entered
                 if (entry.equalsIgnoreCase("q"))
                 {
                     System.exit(0);

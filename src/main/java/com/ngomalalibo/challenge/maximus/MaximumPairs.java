@@ -9,6 +9,7 @@ public class MaximumPairs
 {
     private static Scanner scanner = new Scanner(System.in);
     
+    private static int maximumPairs = 0;
     
     private static int noOfWashes;
     private static List<Colors> cleanPile = new ArrayList<Colors>();
@@ -17,31 +18,9 @@ public class MaximumPairs
     private static Map<Colors, Long> cleanSockTotalMap = new HashMap<Colors, Long>();
     private static Map<Colors, Long> dirtySockTotalMap = new HashMap<Colors, Long>();
     
-    
-    public static void main(String[] args)
-    {
-        log.info("Enter threshold to get active users: ");
-        
-        noOfWashes = scanner.nextInt();
-        //adding sample sock to the clean and dirty piles
-        cleanPile.addAll(Arrays.asList(Colors.GREEN, Colors.BLUE, Colors.GREEN, Colors.GREEN));
-        dirtyPile.addAll(Arrays.asList(Colors.GREEN, Colors.YELLOW, Colors.RED, Colors.BLUE, Colors.YELLOW));
-        
-        // get maximum pair of socks
-        int maximumPair = getMaximumPair();
-        log.info("The maximum number of pair of socks that Anna can take on the trip is " + maximumPair);
-        
-    }
-    
-    //identifying socks with colors using an enumeration
-    enum Colors
-    {
-        GREEN, BLUE, RED, YELLOW
-    }
-    
-    private static int pairs = 0;
-    
-    
+    /**
+     * Answer: Get Maximum number of Pairs Anna can take on her trip
+     */
     private static int getMaximumPair()
     {
         //
@@ -63,16 +42,37 @@ public class MaximumPairs
         for (Colors c : Colors.values())
         {
             Long totalClean = cleanSockTotalMap.get(c);
-            pairs += totalClean / 2;
+            maximumPairs += totalClean / 2;
         }
         
-        return pairs;
+        return maximumPairs;
     }
     
     /**
-     * [green1, blue2, green1, green1]
-     * [green1, yellow4, red3, blue2, yellow1]
+     * Run method to start program
      */
+    public static void main(String[] args)
+    {
+        log.info("Enter no of washes (K): ");
+        
+        noOfWashes = scanner.nextInt();
+        
+        //adding sample sock to the clean and dirty piles
+        cleanPile.addAll(Arrays.asList(Colors.GREEN, Colors.BLUE, Colors.GREEN, Colors.GREEN));
+        dirtyPile.addAll(Arrays.asList(Colors.GREEN, Colors.YELLOW, Colors.RED, Colors.BLUE, Colors.YELLOW));
+        
+        // get maximum pair of socks
+        int maximumPair = getMaximumPair();
+        log.info("The maximum number of pair of socks that Anna can take on the trip is " + maximumPair);
+        
+    }
+    
+    
+    /**
+     * [GREEN, BLUE, GREEN, GREEN]
+     * [GREEN, YELLOW, RED, BLUE, YELLOW]
+     */
+    // Select which socks to wash to ensure maximum pairs are available to Anna
     public static void selectSocksToWash()
     {
         Set<Colors> dirtyColors = dirtySockTotalMap.keySet(); // get of colors in the dirty pile
@@ -125,6 +125,7 @@ public class MaximumPairs
         }
     }
     
+    // Move socks between clean and dirty piles
     public static void wash(Colors sock)
     {
         Long noOfDirtySock = dirtySockTotalMap.get(sock); // get total dirty socks for selected color from map
@@ -142,6 +143,12 @@ public class MaximumPairs
             
             noOfWashes--; // update no of washes after each wash
         }
+    }
+    
+    //identifying socks with colors using an enumeration
+    enum Colors
+    {
+        GREEN, BLUE, RED, YELLOW
     }
     
 }
