@@ -12,34 +12,38 @@ public class MaximumPairs
     private static int maximumPairs = 0;
     
     private static int noOfWashes;
-    private static List<Colors> cleanPile = new ArrayList<Colors>();
-    private static List<Colors> dirtyPile = new ArrayList<Colors>();
+    private static List<Integer> cleanPile = new ArrayList<Integer>();
+    private static List<Integer> dirtyPile = new ArrayList<Integer>();
     
-    private static Map<Colors, Long> cleanSockTotalMap = new HashMap<Colors, Long>();
-    private static Map<Colors, Long> dirtySockTotalMap = new HashMap<Colors, Long>();
+    private static Map<Integer, Long> cleanSockTotalMap = new HashMap<Integer, Long>();
+    private static Map<Integer, Long> dirtySockTotalMap = new HashMap<Integer, Long>();
+    
+    private static Set<Integer> allSocks = new HashSet<>();
     
     /**
      * Answer: Get Maximum number of Pairs Anna can take on her trip
      */
     private static int getMaximumPair()
     {
+        
+        
         //
-        for (Colors color : Colors.values())
+        for (Integer colorIndex : allSocks)
         {
             // organizing the pile of clean socks in the map. The colors and total and stored in the map
-            Long cleanSockCount = cleanPile.stream().filter(sock -> sock == color).count();
-            cleanSockTotalMap.put(color, cleanSockCount);
+            Long cleanSockCount = cleanPile.stream().filter(sock -> sock.equals(colorIndex)).count();
+            cleanSockTotalMap.put(colorIndex, cleanSockCount);
             
             // organizing the pile of dirty socks in the map. The colors and total and stored in the map
-            Long dirtySockCount = dirtyPile.stream().filter(d -> d == color).count();
-            dirtySockTotalMap.put(color, dirtySockCount);
+            Long dirtySockCount = dirtyPile.stream().filter(d -> d.equals(colorIndex)).count();
+            dirtySockTotalMap.put(colorIndex, dirtySockCount);
         }
         
         //we select what to wash in order to have maximum pairs
         selectSocksToWash();
         
         // we proceed to gather the pairs from all the colors we have after washing
-        for (Colors c : Colors.values())
+        for (Integer c : allSocks)
         {
             Long totalClean = cleanSockTotalMap.get(c);
             maximumPairs += totalClean / 2;
@@ -53,13 +57,21 @@ public class MaximumPairs
      */
     public static void main(String[] args)
     {
-        log.info("Enter no of washes (K): ");
+        cleanPile.addAll(Arrays.asList(1, 2, 1, 1));
+        dirtyPile.addAll(Arrays.asList(1, 4, 3, 2, 4));
+        
+        
+        allSocks.addAll(cleanPile);
+        allSocks.addAll(dirtyPile);
+        System.out.println(allSocks.toString());
+        
+        /*allSocks.addAll(cleanPile);
+        allSocks.addAll(dirtyPile);*/
+        
+        log.info("Enter threshold to get active users: ");
         
         noOfWashes = scanner.nextInt();
         
-        //adding sample sock to the clean and dirty piles
-        cleanPile.addAll(Arrays.asList(Colors.GREEN, Colors.BLUE, Colors.GREEN, Colors.GREEN));
-        dirtyPile.addAll(Arrays.asList(Colors.GREEN, Colors.YELLOW, Colors.RED, Colors.BLUE, Colors.YELLOW));
         
         // get maximum pair of socks
         int maximumPair = getMaximumPair();
@@ -75,7 +87,7 @@ public class MaximumPairs
     // Select which socks to wash to ensure maximum pairs are available to Anna
     public static void selectSocksToWash()
     {
-        Set<Colors> dirtyColors = dirtySockTotalMap.keySet(); // get of colors in the dirty pile
+        Set<Integer> dirtyColors = dirtySockTotalMap.keySet(); // get of colors in the dirty pile
         
         // washing socks from the dirty pile to match single socks in clean pile
         cleanSockTotalMap.keySet().forEach(color ->
@@ -126,7 +138,7 @@ public class MaximumPairs
     }
     
     // Move socks between clean and dirty piles
-    public static void wash(Colors sock)
+    public static void wash(Integer sock)
     {
         Long noOfDirtySock = dirtySockTotalMap.get(sock); // get total dirty socks for selected color from map
         
@@ -146,9 +158,9 @@ public class MaximumPairs
     }
     
     //identifying socks with colors using an enumeration
-    enum Colors
+    /*enum Colors
     {
         GREEN, BLUE, RED, YELLOW
-    }
+    }*/
     
 }
